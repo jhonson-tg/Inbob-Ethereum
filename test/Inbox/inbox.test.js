@@ -3,7 +3,7 @@ const ganache = require('ganache-cli');
 const Web3 = require('web3');
 // Instance of Web3
 const web3 = new Web3(ganache.provider());
-const { interface, bytecode } = require('../compile');
+const { abi, evm } = require('../../compile');
 
 let accounts;
 let inbox;
@@ -13,8 +13,8 @@ beforeEach(async () => {
     accounts = await web3.eth.getAccounts();
     //  Creating a instance of contract and deploying it.
     // 1st line: this is how the javascript can contact with ethereum world.
-    inbox = await new web3.eth.Contract(JSON.parse(interface))
-        .deploy({ data: bytecode, arguments: [INITIAL_STRING] })
+    inbox = await new web3.eth.Contract(abi)
+        .deploy({ data: evm.bytecode.object, arguments: [INITIAL_STRING] })
         .send({ from: accounts[0], gas: '1000000' })
 })
 
